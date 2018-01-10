@@ -28,7 +28,7 @@ describe('Factory', () => {
       expect(transaction.bytes).to.be.equal(transactionBytes)
     })
 
-    it('should throw an error if bytes size is too low or too high', () => {
+    it('should throw an error if bytes size is too small or too big', () => {
       expect(() => {
         factory.createTransactionFromBytes(transactionBytes.slice(0, Transaction.BYTES_SIZE - 10))
       }).to.throw()
@@ -53,14 +53,16 @@ describe('Factory', () => {
       expect(hash.bytes).to.be.equal(hashBytes)
     })
 
-    it('should throw and error if bytes size is too low or too high', () => {
-      expect(() => {
-        factory.createHashFromBytes(hashBytes.slice(0, Hash.BYTES_SIZE - 10))
-      }).to.throw()
-
+    it('should throw and error if bytes size is too big', () => {
       expect(() => {
         factory.createHashFromBytes(Buffer.concat([hashBytes, new Buffer('12341234', 'utf8')]))
       }).to.throw()
+    })
+
+    it(`should not throw an error if bytes size is smaller then ${Hash.BYTES_SIZE}`, () => {
+      expect(() => {
+        factory.createHashFromBytes(hashBytes.slice(0, Hash.BYTES_SIZE - 10))
+      }).to.not.throw()
     })
   })
 

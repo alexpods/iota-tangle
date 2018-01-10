@@ -23,7 +23,7 @@ export class Factory {
   }
 
   createHashFromBytes(bytes: Buffer): Hash {
-    if (bytes.byteLength !== Hash.BYTES_SIZE) {
+    if (bytes.byteLength > Hash.BYTES_SIZE) {
       throw new Error('Bytes size is incorrect!')
     }
 
