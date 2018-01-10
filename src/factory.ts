@@ -1,4 +1,5 @@
 import { Transaction } from './transaction'
+import { Hash } from './hash'
 import { Serializer } from './serializer'
 
 export interface FactoryParams {
@@ -13,7 +14,11 @@ export class Factory {
     this._serializer = params.serializer
   }
 
-  createTransactionFromBytes(buffer: Buffer) {
-    return Transaction.createFromBytes(this._serializer, buffer)
+  createTransactionFromBytes(bytes: Buffer): Transaction {
+    return Transaction.createFromBytes(bytes, this._serializer)
+  }
+
+  createHashFromBytes(bytes: Buffer): Hash {
+    return Hash.createFromBytes(bytes)
   }
 }

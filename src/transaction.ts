@@ -4,9 +4,9 @@ export class Transaction {
 
   static BYTES_SIZE = 1604
 
-  static createFromBytes(serializer: Serializer, bytes: Buffer) {
+  static createFromBytes(bytes: Buffer, serializer: Serializer): Transaction {
     if (bytes.byteLength !== Transaction.BYTES_SIZE) {
-      throw new Error('Incorrecty bytes size!')
+      throw new Error('Bytes size is incorrect!')
     }
 
     const transaction = new Transaction()
