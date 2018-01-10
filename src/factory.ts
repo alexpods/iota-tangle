@@ -15,10 +15,18 @@ export class Factory {
   }
 
   createTransactionFromBytes(bytes: Buffer): Transaction {
+    if (bytes.byteLength !== Transaction.BYTES_SIZE) {
+      throw new Error('Bytes size is incorrect!')
+    }
+
     return Transaction.createFromBytes(bytes, this._serializer)
   }
 
   createHashFromBytes(bytes: Buffer): Hash {
+    if (bytes.byteLength !== Hash.BYTES_SIZE) {
+      throw new Error('Bytes size is incorrect!')
+    }
+
     return Hash.createFromBytes(bytes)
   }
 }
