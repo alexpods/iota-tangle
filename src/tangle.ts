@@ -1,5 +1,6 @@
 import { Storage } from "./storage"
 import { Transaction } from "./transaction"
+import { Bundle } from "./bundle"
 
 export class Tangle {
   private _storage: Storage
@@ -10,7 +11,11 @@ export class Tangle {
     this._storage = params.storage
   }
 
-  async getTransaction(transactionHash: string): Promise<Transaction> {
+  async getBundle(bundleHash: string): Promise<Bundle|null> {
+    return this._storage.getBundle(bundleHash)
+  }
+
+  async getTransaction(transactionHash: string): Promise<Transaction|null> {
     return this._storage.getTransaction(transactionHash)
   }
 

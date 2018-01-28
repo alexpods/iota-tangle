@@ -68,6 +68,8 @@ export class Transaction {
   static ATTACHMENT_TIMESTAMP_UPPER_BOUND_SIZE = 27
   static NONCE_OFFSET = 7938
   static NONCE_SIZE = 81
+  static ESSENCE_OFFSET = 6561
+  static ESSENCE_SIZE = 486
   static SIZE = 8019
 
   static createFromBytes(bytes: Buffer, attributes?: { [attribute: string]: any }): Transaction {
@@ -331,9 +333,16 @@ export class Transaction {
     return this._bytes
   }
 
-  trits(field?: TransactionField | "hash"): trit[] {
+  trits(field?: TransactionField | "essence"): trit[] {
     if (!this._trits) {
       this._updateTrits()
+    }
+
+    if (field === "essence") {
+      return this._trits.slice(
+        Transaction.ESSENCE_OFFSET,
+        Transaction.ESSENCE_OFFSET + Transaction.ESSENCE_SIZE,
+      )
     }
 
     if (field) {
@@ -425,9 +434,16 @@ export class Transaction {
     return this._trits
   }
 
-  trytes(field?: TransactionField | "hash"): string {
+  trytes(field?: TransactionField | "essence"): string {
     if (!this._trytes) {
       this._updateTrytes()
+    }
+
+    if (field === "essence") {
+      return this._trytes.slice(
+        (Transaction.ESSENCE_OFFSET)/3,
+        (Transaction.ESSENCE_OFFSET + Transaction.ESSENCE_SIZE)/3,
+      )
     }
 
     if (field) {

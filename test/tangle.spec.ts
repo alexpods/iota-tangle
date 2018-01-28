@@ -15,17 +15,28 @@ describe("Tangle", () => {
   let storage: Storage
   let tangle: Tangle
   let transaction: Transaction
+  let bundle: any
 
   beforeEach(() => {
     storage = {
+      getBundle:         spy(async () => bundle),
+      getTransaction:    spy(async () => transaction),
       appendTransaction: spy(async () => true),
       updateTransaction: spy(async () => false),
-      getTransaction:    spy(async () => transaction),
     }
 
     data = generateTransactionData()
     tangle = new Tangle({ storage })
     transaction = Transaction.createFromData(data)
+    bundle = {}
+  })
+
+  describe("getBundle(bundleHash)", () => {
+    it("should delegate fetching to the storage", async () => {
+      expect(storage.getBundle).to.not.have.been.called
+      await expect(tangle.getBundle(transaction.bundle)).to.eventually.equals(bundle)
+      expect(storage.getBundle).to.have.been.calledWith(transaction.bundle)
+    })
   })
 
   describe("getTransaction(transactionHash)", () => {

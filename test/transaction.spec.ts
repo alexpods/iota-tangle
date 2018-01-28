@@ -1,7 +1,14 @@
 import { expect } from "chai"
 import { trit, bytesToTrits, tritsToBytes, tritsToTrytes, trytesToTrits, numberToTrytes } from "iota-ternary"
 import { Transaction, TransactionData } from "../src/transaction"
-import { generateBytes, generateTrytes, generateTrits, generateTransactionData, calculateHash } from "./utils"
+import {
+  generateBytes,
+  generateTrytes,
+  generateTrits,
+  generateTransactionData,
+  calculateHash,
+  BUNDLE_TRANSACTIONS
+} from "./utils"
 
 describe("Transaction", () => {
 
@@ -453,60 +460,64 @@ describe("Transaction", () => {
       expect(transaction.trits()).to.equal(trits)
     })
 
-    it("should return address trits if field = 'address'", () => {
+    it("should return address trits if the field ='address'", () => {
       expect(transaction.trits("address")).to.deep.equal(trits.slice(6561, 6804))
     })
 
-    it("should return value trits if field = 'value'", () => {
+    it("should return value trits if the field ='value'", () => {
       expect(transaction.trits("value")).to.deep.equal(trits.slice(6804, 6885))
     })
 
-    it("should return obsolete tag trits if field = 'obsoleteTag'", () => {
+    it("should return obsolete tag trits if the field ='obsoleteTag'", () => {
       expect(transaction.trits("obsoleteTag")).to.deep.equal(trits.slice(6885, 6966))
     })
 
-    it("should return timestamp trits if field = 'timestamp'", () => {
+    it("should return timestamp trits if the field ='timestamp'", () => {
       expect(transaction.trits("timestamp")).to.deep.equal(trits.slice(6966, 6993))
     })
 
-    it("should return current index trits if field = 'currentIndex'", () => {
+    it("should return current index trits if the field ='currentIndex'", () => {
       expect(transaction.trits("currentIndex")).to.deep.equal(trits.slice(6993, 7020))
     })
 
-    it("should return last index trits if field = 'lastIndex'", () => {
+    it("should return last index trits if the field ='lastIndex'", () => {
       expect(transaction.trits("lastIndex")).to.deep.equal(trits.slice(7020, 7047))
     })
 
-    it("should return bundle hash trits if field = 'bundle'", () => {
+    it("should return bundle hash trits if the field ='bundle'", () => {
       expect(transaction.trits("bundle")).to.deep.equal(trits.slice(7047, 7290))
     })
 
-    it("should return trunk transaction hash trits if field = 'trunk'", () => {
+    it("should return trunk transaction hash trits if the field ='trunk'", () => {
       expect(transaction.trits("trunk")).to.deep.equal(trits.slice(7290, 7533))
     })
 
-    it("should return branch transaction hash trits if field = 'branch'", () => {
+    it("should return branch transaction hash trits if the field ='branch'", () => {
       expect(transaction.trits("branch")).to.deep.equal(trits.slice(7533, 7776))
     })
 
-    it("should return tag hash trits if field = 'tag'", () => {
+    it("should return tag hash trits if the field ='tag'", () => {
       expect(transaction.trits("tag")).to.deep.equal(trits.slice(7776, 7857))
     })
 
-    it("should return attachment timestamp hash trits if field = 'attachmentTimestamp'", () => {
+    it("should return attachment timestamp hash trits if the field ='attachmentTimestamp'", () => {
       expect(transaction.trits("attachmentTimestamp")).to.deep.equal(trits.slice(7857, 7884))
     })
 
-    it("should return attachment timestamp lower bound hash trits if field = 'attachmentTimestampLowerBound'", () => {
+    it("should return attachment timestamp lower bound hash trits if the field ='attachmentTimestampLowerBound'", () => {
       expect(transaction.trits("attachmentTimestampLowerBound")).to.deep.equal(trits.slice(7884, 7911))
     })
 
-    it("should return attachment timestamp upper bound hash trits if field = 'attachmentTimestampUpperBound'", () => {
+    it("should return attachment timestamp upper bound hash trits if the field ='attachmentTimestampUpperBound'", () => {
       expect(transaction.trits("attachmentTimestampUpperBound")).to.deep.equal(trits.slice(7911, 7938))
     })
 
-    it("should return nonce trits if field = 'nonce'", () => {
+    it("should return nonce trits if the field ='nonce'", () => {
       expect(transaction.trits("nonce")).to.deep.equal(trits.slice(7938, 8019))
+    })
+
+    it("should return essence trits if the field = 'essence'", () => {
+      expect(transaction.trits("essence")).to.deep.equal(trits.slice(6561, 7047))
     })
 
     it("should throw an error if there were specified incorrect fiedl name", () => {
@@ -527,60 +538,64 @@ describe("Transaction", () => {
       expect(transaction.trytes()).to.equal(trytes)
     })
 
-    it("should return address trytes if field = 'address'", () => {
+    it("should return address trytes if the field ='address'", () => {
       expect(transaction.trytes("address")).to.deep.equal(trytes.slice(2187, 2268))
     })
 
-    it("should return value trytes if field = 'value'", () => {
+    it("should return value trytes if the field ='value'", () => {
       expect(transaction.trytes("value")).to.deep.equal(trytes.slice(2268, 2295))
     })
 
-    it("should return obsolete tag trytes if field = 'obsoleteTag'", () => {
+    it("should return obsolete tag trytes if the field ='obsoleteTag'", () => {
       expect(transaction.trytes("obsoleteTag")).to.deep.equal(trytes.slice(2295, 2322))
     })
 
-    it("should return timestamp trytes if field = 'timestamp'", () => {
+    it("should return timestamp trytes if the field ='timestamp'", () => {
       expect(transaction.trytes("timestamp")).to.deep.equal(trytes.slice(2322, 2331))
     })
 
-    it("should return current index trytes if field = 'currentIndex'", () => {
+    it("should return current index trytes if the field ='currentIndex'", () => {
       expect(transaction.trytes("currentIndex")).to.deep.equal(trytes.slice(2331, 2340))
     })
 
-    it("should return last index trytes if field = 'lastIndex'", () => {
+    it("should return last index trytes if the field ='lastIndex'", () => {
       expect(transaction.trytes("lastIndex")).to.deep.equal(trytes.slice(2340, 2349))
     })
 
-    it("should return bundle hash trytes if field = 'bundle'", () => {
+    it("should return bundle hash trytes if the field ='bundle'", () => {
       expect(transaction.trytes("bundle")).to.deep.equal(trytes.slice(2349, 2430))
     })
 
-    it("should return trunk transaction hash trytes if field = 'trunk'", () => {
+    it("should return trunk transaction hash trytes if the field ='trunk'", () => {
       expect(transaction.trytes("trunk")).to.deep.equal(trytes.slice(2430, 2511))
     })
 
-    it("should return branch transaction hash trytes if field = 'branch'", () => {
+    it("should return branch transaction hash trytes if the field ='branch'", () => {
       expect(transaction.trytes("branch")).to.deep.equal(trytes.slice(2511, 2592))
     })
 
-    it("should return tag hash trytes if field = 'tag'", () => {
+    it("should return tag hash trytes if the field ='tag'", () => {
       expect(transaction.trytes("tag")).to.deep.equal(trytes.slice(2592, 2619))
     })
 
-    it("should return attachment timestamp hash trytes if field = 'attachmentTimestamp'", () => {
+    it("should return attachment timestamp hash trytes if the field ='attachmentTimestamp'", () => {
       expect(transaction.trytes("attachmentTimestamp")).to.deep.equal(trytes.slice(2619, 2628))
     })
 
-    it("should return attachment timestamp lower bound hash trytes if field = 'attachmentTimestampLowerBound'", () => {
+    it("should return attachment timestamp lower bound hash trytes if the field ='attachmentTimestampLowerBound'", () => {
       expect(transaction.trytes("attachmentTimestampLowerBound")).to.deep.equal(trytes.slice(2628, 2637))
     })
 
-    it("should return attachment timestamp upper bound hash trytes if field = 'attachmentTimestampUpperBound'", () => {
+    it("should return attachment timestamp upper bound hash trytes if the field ='attachmentTimestampUpperBound'", () => {
       expect(transaction.trytes("attachmentTimestampUpperBound")).to.deep.equal(trytes.slice(2637, 2646))
     })
 
-    it("should return nonce trytes if field = 'nonce'", () => {
+    it("should return nonce trytes if the field ='nonce'", () => {
       expect(transaction.trytes("nonce")).to.deep.equal(trytes.slice(2646, 2673))
+    })
+
+    it("should return essence trytes if the field = 'essence'", () => {
+      expect(transaction.trytes("essence")).to.deep.equal(trytes.slice(2187, 2349))
     })
 
     it("should throw an error if there were specified incorrect fiedl name", () => {
@@ -636,6 +651,26 @@ describe("Transaction", () => {
 
     it("should return false for absent attribute", () => {
       expect(transaction.has("absentAttr")).to.be.false
+    })
+  })
+
+  describe("calculateHash()", () => {
+    let hashes: string[]
+    let transactions: Transaction[]
+
+    beforeEach(() => {
+      hashes = []
+      transactions = []
+
+      for (let hash in BUNDLE_TRANSACTIONS) {
+        hashes.push(hash)
+        transactions.push(Transaction.createFromData(BUNDLE_TRANSACTIONS[hash]))
+      }
+    })
+    it("should correctly calculate the hash of the transaction", () => {
+      for (let i = 0; i < transactions.length; ++i) {
+        expect(tritsToTrytes(transactions[i].calculateHash())).to.equal(hashes[i])
+      }
     })
   })
 })
