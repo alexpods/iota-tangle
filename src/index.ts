@@ -1,4 +1,5 @@
 export { Tangle } from "./tangle"
-export { Storage } from "./storage"
 export { Transaction, TransactionData, TransactionField } from "./transaction"
+export { Bundle } from "./bundle"
+export { Storage } from "./storage"
 export { Validator, TransactionValidationResult, BundleValidationResult } from "./validator"
