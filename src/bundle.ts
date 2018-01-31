@@ -19,6 +19,22 @@ export class Bundle {
     return this._transactions
   }
 
+  get hash() {
+    return this._transactions[0].hash
+  }
+
+  get size(): number {
+    return this._transactions.length
+  }
+
+  get trunk(): string|null {
+    return this._transactions[this._transactions.length - 1].trunk
+  }
+
+  get branch(): string|null {
+    return this._transactions[this._transactions.length - 1].branch
+  }
+
   calculateHash(): trit[] {
     const hash = new Array<trit>(Transaction.BUNDLE_SIZE)
     const kerl = new Kerl()

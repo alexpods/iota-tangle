@@ -17,6 +17,7 @@ export type TransactionField = (
 const Curl = require("iota.lib.js/lib/crypto/curl/curl")
 
 export interface TransactionData {
+  hash?: string
   address: string
   value: number
   obsoleteTag: string
@@ -102,6 +103,10 @@ export class Transaction {
   static createFromData(data: TransactionData,  attributes?: { [attribute: string]: any }): Transaction {
     const transaction = new Transaction()
 
+    if (typeof data.hash !== "undefined") {
+      transaction._hash = data.hash
+    }
+
     transaction._address = data.address
 
     transaction._value = data.value
@@ -157,6 +162,15 @@ export class Transaction {
   private _weightMagnitude: number
 
   private _attributes: { [attribute: string]: any }
+
+
+  get hash(): string {
+    if (typeof this._hash === "undefined") {
+      this._hash = tritsToTrytes(this.calculateHash())
+    }
+
+    return this._hash
+  }
 
   get address(): string {
     if (typeof this._address === "undefined") {
@@ -301,14 +315,6 @@ export class Transaction {
     }
 
     return this._weightMagnitude
-  }
-
-  hash(): string {
-    if (typeof this._hash === "undefined") {
-      this._hash = tritsToTrytes(this.calculateHash())
-    }
-
-    return this._hash
   }
 
   get(attribute: string): any {

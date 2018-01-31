@@ -403,6 +403,14 @@ describe("Transaction", () => {
       expect(transaction.message).to.equal(data.message["padEnd"](2187, "9"))
     })
 
+    it("should be able to initialize a hash", () => {
+      data.hash = "B".repeat(81)
+
+      const transaction = Transaction.createFromData(data)
+
+      expect(transaction.hash).to.equal("B".repeat(81))
+    })
+
     it("should be able to provide transaction attributes", () => {
       const transaction = Transaction.createFromData(data, { isValid: true, sender: "127.0.0.1" })
 
@@ -427,7 +435,7 @@ describe("Transaction", () => {
       trits = generateTrits()
 
       transaction = Transaction.createFromTrits(trits)
-      transaction['_hash'] = transaction.hash().slice(0, -78) + '999'
+      transaction['_hash'] = transaction.hash.slice(0, -78) + '999'
 
       expect(transaction.weightMagnitude).to.gte(9)
     })

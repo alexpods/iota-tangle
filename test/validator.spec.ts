@@ -4,7 +4,7 @@ use(require('chai-as-promised'))
 
 import { Transaction, TransactionData } from "../src/transaction"
 import { Bundle } from "../src/bundle"
-import { Validator, ValidationErrorType } from '../src/validator'
+import { Validator, TransactionValidationResult, BundleValidationResult } from '../src/validator'
 
 import { generateTransactionData, generateTrits, BUNDLE_TRANSACTIONS } from "./utils"
 
@@ -25,10 +25,13 @@ describe("Validator", () => {
       })
     })
 
-    it("should return null if the transaction is valid", async () => {
+    it("should return 0 if the transaction is valid", async () => {
       const transaction = Transaction.createFromData(data)
 
-      await expect(validator.validateTransaction(transaction)).to.be.eventually.null
+      const error = await validator.validateTransaction(transaction)
+
+      expect(error).to.equal(0)
+      expect(error).to.equal(TransactionValidationResult.VALID)
     })
 
     it("should return INVALID_TIMESTAMP error " +
@@ -38,8 +41,7 @@ describe("Validator", () => {
 
       const error = await validator.validateTransaction(transaction)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_TIMESTAMP)
+      expect(error).to.equal(TransactionValidationResult.INVALID_TIMESTAMP)
     })
 
     it("should return INVALID_WEIGHT_MAGNITUDE error " +
@@ -50,8 +52,7 @@ describe("Validator", () => {
 
       const error = await validator.validateTransaction(transaction)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_WEIGHT_MAGNITUDE)
+      expect(error).to.equal(TransactionValidationResult.INVALID_WEIGHT_MAGNITUDE)
     })
 
     it("should return INVALID_ADDRESS error " +
@@ -63,8 +64,7 @@ describe("Validator", () => {
 
       const error = await validator.validateTransaction(transaction)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_ADDRESS)
+      expect(error).to.equal(TransactionValidationResult.INVALID_ADDRESS)
     })
 
     it("should return INVALID_VALUE error " +
@@ -78,8 +78,7 @@ describe("Validator", () => {
 
       const error = await validator.validateTransaction(transaction)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_VALUE)
+      expect(error).to.equal(TransactionValidationResult.INVALID_VALUE)
     })
   })
 
@@ -96,7 +95,10 @@ describe("Validator", () => {
     })
 
     it("should return null if the bundle is valid", async () => {
-      await expect(validator.validateBundle(bundle)).to.eventually.be.null
+      const error = await validator.validateBundle(bundle)
+
+      expect(error).to.equal(0)
+      expect(error).to.equal(BundleValidationResult.VALID)
     })
 
     it("should return INVALID_BUNDLE_TRANSACTION_INDEX error " +
@@ -106,8 +108,7 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_BUNDLE_TRANSACTION_INDEX)
+      expect(error).to.equal(BundleValidationResult.INVALID_TRANSACTION_INDEX)
     })
 
     it("should return INVALID_BUNDLE_TRANSACTION_VALUE error " +
@@ -119,8 +120,7 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_BUNDLE_TRANSACTION_VALUE)
+      expect(error).to.equal(BundleValidationResult.INVALID_TRANSACTION_VALUE)
     })
 
     it("should return INVALID_BUNDLE_TRANSACTION_ADDRESS error " +
@@ -132,8 +132,7 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_BUNDLE_TRANSACTION_ADDRESS )
+      expect(error).to.equal(BundleValidationResult.INVALID_TRANSACTION_ADDRESS )
     })
 
     it("should not return INVALID_BUNDLE_TRANSACTION_ADDRESS error " +
@@ -145,7 +144,7 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.to.be.null
+      expect(error).to.equal(BundleValidationResult.VALID)
     })
 
     it("should return INVALID_BUNDLE_TRANSACTION_BUNDLE_HASH error " +
@@ -155,8 +154,7 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_BUNDLE_TRANSACTION_BUNDLE_HASH )
+      expect(error).to.equal(BundleValidationResult.INVALID_TRANSACTION_BUNDLE_HASH )
     })
 
     it("should return INVALID_BUNDLE_VALUE error if the total value of the bundle is non-zero", async () => {
@@ -165,8 +163,7 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_BUNDLE_VALUE)
+      expect(error).to.equal(BundleValidationResult.INVALID_VALUE)
     })
 
     it("should return INVALID_BUNDLE_HASH error if transactions have incorrect bundle hash", async () => {
@@ -176,8 +173,7 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_BUNDLE_HASH)
+      expect(error).to.equal(BundleValidationResult.INVALID_HASH)
     })
 
     it("should return INVALID_BUNDLE_TRANSACTION_SIGNATURE error " +
@@ -189,8 +185,8 @@ describe("Validator", () => {
 
       const error = await validator.validateBundle(bundle)
 
-      expect(error).to.not.be.null
-      expect(error.type).to.equal(ValidationErrorType.INVALID_BUNDLE_TRANSACTION_SIGNATURE)
+      expect(error).to.equal(BundleValidationResult.INVALID_TRANSACTION_SIGNATURE)
     })
   })
 })
+
